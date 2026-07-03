@@ -4,7 +4,7 @@ import QuakeMap from './components/QuakeMap'
 import Footer from './components/Footer'
 import { calcDistanceKm, playAlertSound } from './utils/phivolcs'
 
-const REFRESH_MS = 30000
+const REFRESH_MS = 10000
 const SIGNIFICANT_MAG = 5
 
 function App() {
@@ -34,48 +34,65 @@ function App() {
     setPermission(result)
   }
 
-  const fetchQuakes = async () => {
-    try {
-      setError('')
+const fetchQuakes = async () => {
+  try {
+    setError('')
 
-      const res = await fetch(
-        'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50',
-        { cache: 'no-store' }
-      )
+    const url =
+      'https://earthquake.usgs.gov/fdsnws/event/1/query' +
+      '?format=geojson' +
+      '&minlatitude=4&maxlatitude=22' +
+      '&minlongitude=116&maxlongitude=127' +
+      '&orderby=time' +
+      '&limit=50' +
+      '&minmagnitude=3'
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const res = await fetch(url, { cache: 'no-store' })
 
-      const data = await res.json()
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-      if (!Array.isArray(data.features)) {
-        throw new Error('Invalid USGS response')
-      }
+    const data = await res.json()
 
-      const parsed = data.features
-        .filter(item =>
-          item?.properties &&
-          item?.geometry &&
-          Array.isArray(item.geometry.coordinates)
-        )
-        .map(item => ({
-          id: item.id,
-          dateTime: new Date(item.properties.time).toLocaleString(),
-          location: item.properties.place,
-          magnitude: Number(item.properties.mag ?? 0),
-          depthKm: Number(item.geometry.coordinates[2]),
-          lat: Number(item.geometry.coordinates[1]),
-          lng: Number(item.geometry.coordinates[0]),
-        }))
-
-      setQuakes(parsed)
-      setUpdatedAt(new Date())
-    } catch (err) {
-      setError(err.message || 'Failed to load earthquake data')
-      setQuakes([])
-    } finally {
-      setLoading(false)
+    if (!data?.features || !Array.isArray(data.features)) {
+      throw new Error('Invalid USGS response')
     }
+
+    const parsed = data.features
+      .filter(item => {
+        const coords = item?.geometry?.coordinates
+        if (!coords) return false
+
+        const [lng, lat] = coords
+
+        // 🇵🇭 PH ONLY FILTER
+        return lat >= 4 && lat <= 22 && lng >= 116 && lng <= 127
+      })
+      .map(item => {
+        const [lng, lat, depth] = item.geometry.coordinates
+
+        return {
+          id: item.id,
+          time: item.properties.time, // ⚡ raw timestamp (for correct sorting)
+          dateTime: new Date(item.properties.time).toLocaleString(),
+          location: item.properties.place || 'Unknown',
+          magnitude: Number(item.properties.mag) || 0,
+          depthKm: Number(depth) || 0,
+          lat,
+          lng,
+        }
+      })
+      // ⚡ correct + fast sorting
+      .sort((a, b) => b.time - a.time)
+
+    setQuakes(parsed)
+    setUpdatedAt(new Date())
+  } catch (err) {
+    setError(err?.message || 'Failed to load earthquake data')
+    setQuakes([])
+  } finally {
+    setLoading(false)
   }
+}
 
   useEffect(() => {
     if (!navigator.geolocation) return
