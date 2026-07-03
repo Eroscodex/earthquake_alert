@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import QuakeCard from './components/QuakeCard'
 import QuakeMap from './components/QuakeMap'
 import { calcDistanceKm, parsePhivolcsHtml, playAlertSound } from './utils/phivolcs'
+import Footer from './components/Footer'
 
 const REFRESH_MS = 30000
 const SIGNIFICANT_MAG = 5
@@ -74,8 +75,8 @@ function App() {
   }, [latestSignificant, permission])
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+    <main className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
+      <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
         <header className="mb-6 rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/50 p-5 shadow-xl shadow-cyan-950/20">
           <p className="text-xs tracking-[0.2em] text-cyan-300">REAL-TIME PHIVOLCS</p>
           <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">PH Quake Alert</h1>
@@ -125,6 +126,7 @@ function App() {
           </div>
         </section>
       </div>
+      <Footer />
     </main>
   )
 }
