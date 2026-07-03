@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import QuakeCard from './components/QuakeCard'
 import QuakeMap from './components/QuakeMap'
-import { calcDistanceKm, parsePhivolcsHtml, playAlertSound } from './utils/phivolcs'
+import { calcDistanceKm, playAlertSound } from './utils/phivolcs'
 import Footer from './components/Footer'
 
 const REFRESH_MS = 30000
@@ -32,9 +32,8 @@ function App() {
       setError('')
       const res = await fetch('https://earthquake-alert-backend.onrender.com/api/phivolcs', { cache: 'no-store' })
       if (!res.ok) throw new Error('Failed to fetch latest PHIVOLCS data.')
-      const html = await res.text()
-      const parsed = parsePhivolcsHtml(html)
-      setQuakes(parsed)
+    const parsed = await res.json()
+    setQuakes(parsed)
       setUpdatedAt(new Date())
     } catch (err) {
       setError(err.message || 'Unable to load earthquake data.')
