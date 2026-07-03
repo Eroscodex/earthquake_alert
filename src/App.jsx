@@ -13,13 +13,21 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [updatedAt, setUpdatedAt] = useState(null)
   const [userLocation, setUserLocation] = useState(null)
-  const [permission, setPermission] = useState(Notification.permission)
+  const [permission, setPermission] = useState(
+    "Notification" in window ? Notification.permission : "denied"
+  );
   const seenAlertIds = useRef(new Set())
 
-  const latestSignificant = useMemo(
-    () => quakes.find((q) => q.magnitude >= SIGNIFICANT_MAG),
-    [quakes],
-  )
+  const latestSignificant = useMemo(() => {
+    console.log("quakes:", quakes)
+    console.log("Is Array:", Array.isArray(quakes))
+
+    if (!Array.isArray(quakes)) {
+      return null
+    }
+
+    return quakes.find((q) => q.magnitude >= SIGNIFICANT_MAG)
+  }, [quakes])
 
   const askNotificationPermission = async () => {
     if (!('Notification' in window)) return
@@ -28,40 +36,56 @@ function App() {
   }
 
   const fetchQuakes = async () => {
-  try {
-    setError("");
+    try {
+      setError("")
 
-    const res = await fetch(
-      "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50",
-      {
-        cache: "no-store",
+      const res = await fetch(
+        "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50",
+        { cache: "no-store" }
+      )
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`)
       }
-    );
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch earthquake data.");
+      const data = await res.json();
+
+      console.log(data);
+      console.log(Array.isArray(data.features));
+
+      if (!Array.isArray(data.features)) {
+        throw new Error("Invalid USGS response")
+      }
+
+      const parsed = data.features
+        .filter(
+          (item) =>
+            item.properties &&
+            item.geometry &&
+            Array.isArray(item.geometry.coordinates)
+        )
+        .map((item) => ({
+          id: item.id,
+          dateTime: new Date(item.properties.time).toLocaleString(),
+          location: item.properties.place,
+          magnitude: Number(item.properties.mag),
+          depthKm: Number(item.geometry.coordinates[2]),
+          lat: Number(item.geometry.coordinates[1]),
+          lng: Number(item.geometry.coordinates[0]),
+        }))
+
+      console.log(parsed)
+
+      setQuakes(parsed)
+      setUpdatedAt(new Date())
+    } catch (err) {
+      console.error(err)
+      setError(err.message)
+      setQuakes([])
+    } finally {
+      setLoading(false)
     }
-
-    const data = await res.json();
-
-    const parsed = data.features.map((item) => ({
-      id: item.id,
-      dateTime: new Date(item.properties.time).toLocaleString(),
-      location: item.properties.place,
-      magnitude: item.properties.mag,
-      depthKm: item.geometry.coordinates[2],
-      lat: item.geometry.coordinates[1],
-      lng: item.geometry.coordinates[0],
-    }));
-
-    setQuakes(parsed);
-    setUpdatedAt(new Date());
-  } catch (err) {
-    setError(err.message || "Unable to load earthquake data.");
-  } finally {
-    setLoading(false);
   }
-};
 
   useEffect(() => {
     if (!navigator.geolocation) return
