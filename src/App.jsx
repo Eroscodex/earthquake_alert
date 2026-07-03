@@ -30,7 +30,7 @@ function App() {
   const fetchQuakes = async () => {
     try {
       setError('')
-      const res = await fetch('/api/phivolcs', { cache: 'no-store' })
+      const res = await fetch('/api/phivolcs.js', { cache: 'no-store' })
       if (!res.ok) throw new Error('Failed to fetch latest PHIVOLCS data.')
       const html = await res.text()
       const parsed = parsePhivolcsHtml(html)
