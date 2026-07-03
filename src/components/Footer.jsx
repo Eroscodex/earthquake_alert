@@ -4,7 +4,7 @@ function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-6 text-center md:flex-row md:text-left">
         <div>
           <h2 className="text-lg font-semibold text-cyan-300">
-            PH Quake Alert
+            PH Earthquake Alert
           </h2>
 
           <p className="mt-1 text-sm text-slate-400">
@@ -20,7 +20,7 @@ function Footer() {
               rel="noopener noreferrer"
               className="text-cyan-400 hover:text-cyan-300 hover:underline"
             >
-              PHIVOLCS-DOST
+             earthquake.usgs.gov
             </a>
           </p>
         </div>

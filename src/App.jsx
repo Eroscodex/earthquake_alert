@@ -125,11 +125,11 @@ function App() {
 
         <header className="mb-6 rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/50 p-5 shadow-xl shadow-cyan-950/20">
           <p className="text-xs tracking-[0.2em] text-cyan-300">
-            REAL-TIME EARTHQUAKE MONITOR
+            REAL-TIME MONITORING AND VISUALIZATION OF EARTHQUAKES IN THE PHILIPPINES
           </p>
 
           <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">
-            PH Quake Alert
+            PH Earthquake Alert
           </h1>
 
           <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-300">
