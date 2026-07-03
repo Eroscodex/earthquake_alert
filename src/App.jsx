@@ -28,19 +28,40 @@ function App() {
   }
 
   const fetchQuakes = async () => {
-    try {
-      setError('')
-      const res = await fetch('/api/phivolcs', { cache: 'no-store' })
-      if (!res.ok) throw new Error('Failed to fetch latest PHIVOLCS data.')
-    const parsed = await res.json()
-    setQuakes(parsed)
-      setUpdatedAt(new Date())
-    } catch (err) {
-      setError(err.message || 'Unable to load earthquake data.')
-    } finally {
-      setLoading(false)
+  try {
+    setError("");
+
+    const res = await fetch(
+      "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50",
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch earthquake data.");
     }
+
+    const data = await res.json();
+
+    const parsed = data.features.map((item) => ({
+      id: item.id,
+      dateTime: new Date(item.properties.time).toLocaleString(),
+      location: item.properties.place,
+      magnitude: item.properties.mag,
+      depthKm: item.geometry.coordinates[2],
+      lat: item.geometry.coordinates[1],
+      lng: item.geometry.coordinates[0],
+    }));
+
+    setQuakes(parsed);
+    setUpdatedAt(new Date());
+  } catch (err) {
+    setError(err.message || "Unable to load earthquake data.");
+  } finally {
+    setLoading(false);
   }
+};
 
   useEffect(() => {
     if (!navigator.geolocation) return

@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const response = await fetch(
-      'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson',
+      'https://earthquake.phivolcs.dost.gov.ph/EQLatest-Monthly/EQLatest.html',
       {
         headers: {
           'User-Agent': 'Mozilla/5.0',
