@@ -13,20 +13,19 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [updatedAt, setUpdatedAt] = useState(null)
   const [userLocation, setUserLocation] = useState(null)
-  const [permission, setPermission] = useState(
-    "Notification" in window ? Notification.permission : "denied"
-  );
+
+  const [permission, setPermission] = useState(() => {
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      return Notification.permission
+    }
+    return 'denied'
+  })
+
   const seenAlertIds = useRef(new Set())
 
   const latestSignificant = useMemo(() => {
-    console.log("quakes:", quakes)
-    console.log("Is Array:", Array.isArray(quakes))
-
-    if (!Array.isArray(quakes)) {
-      return null
-    }
-
-    return quakes.find((q) => q.magnitude >= SIGNIFICANT_MAG)
+    if (!Array.isArray(quakes)) return null
+    return quakes.find(q => q.magnitude >= SIGNIFICANT_MAG)
   }, [quakes])
 
   const askNotificationPermission = async () => {
@@ -37,50 +36,41 @@ function App() {
 
   const fetchQuakes = async () => {
     try {
-      setError("")
+      setError('')
 
       const res = await fetch(
-        "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50",
-        { cache: "no-store" }
+        'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50',
+        { cache: 'no-store' }
       )
 
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`)
-      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-      const data = await res.json();
-
-      console.log(data);
-      console.log(Array.isArray(data.features));
+      const data = await res.json()
 
       if (!Array.isArray(data.features)) {
-        throw new Error("Invalid USGS response")
+        throw new Error('Invalid USGS response')
       }
 
       const parsed = data.features
-        .filter(
-          (item) =>
-            item.properties &&
-            item.geometry &&
-            Array.isArray(item.geometry.coordinates)
+        .filter(item =>
+          item?.properties &&
+          item?.geometry &&
+          Array.isArray(item.geometry.coordinates)
         )
-        .map((item) => ({
+        .map(item => ({
           id: item.id,
           dateTime: new Date(item.properties.time).toLocaleString(),
           location: item.properties.place,
-          magnitude: Number(item.properties.mag),
+          magnitude: Number(item.properties.mag ?? 0),
           depthKm: Number(item.geometry.coordinates[2]),
           lat: Number(item.geometry.coordinates[1]),
           lng: Number(item.geometry.coordinates[0]),
         }))
 
-      console.log(parsed)
-
       setQuakes(parsed)
       setUpdatedAt(new Date())
     } catch (err) {
-      console.error(err)
-      setError(err.message)
+      setError(err.message || 'Failed to load earthquake data')
       setQuakes([])
     } finally {
       setLoading(false)
@@ -89,12 +79,20 @@ function App() {
 
   useEffect(() => {
     if (!navigator.geolocation) return
+
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+      pos => {
+        setUserLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        })
       },
       () => {},
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      }
     )
   }, [])
 
@@ -112,50 +110,74 @@ function App() {
     playAlertSound()
 
     if ('Notification' in window && permission === 'granted') {
-      new Notification(`PH Quake Alert M${latestSignificant.magnitude}`, {
-        body: `${latestSignificant.location} | Depth ${latestSignificant.depthKm} km`,
-      })
+      new Notification(
+        `PH Quake Alert M${latestSignificant.magnitude}`,
+        {
+          body: `${latestSignificant.location} | Depth ${latestSignificant.depthKm} km`,
+        }
+      )
     }
   }, [latestSignificant, permission])
 
   return (
     <main className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
       <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
+
         <header className="mb-6 rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/50 p-5 shadow-xl shadow-cyan-950/20">
-          <p className="text-xs tracking-[0.2em] text-cyan-300">REAL-TIME PHIVOLCS</p>
-          <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">PH Quake Alert</h1>
+          <p className="text-xs tracking-[0.2em] text-cyan-300">
+            REAL-TIME EARTHQUAKE MONITOR
+          </p>
+
+          <h1 className="mt-1 text-2xl font-semibold sm:text-3xl">
+            PH Quake Alert
+          </h1>
+
           <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-300">
+
             <span className="rounded-full border border-slate-700 px-3 py-1">
               Auto-refresh: 30s
             </span>
+
             <span className="rounded-full border border-slate-700 px-3 py-1">
               Updated: {updatedAt ? updatedAt.toLocaleTimeString() : 'Loading...'}
             </span>
+
             <button
               onClick={askNotificationPermission}
               className="rounded-full border border-cyan-500/60 bg-cyan-500/10 px-3 py-1 text-cyan-200 hover:bg-cyan-500/20"
             >
               Notifications: {permission}
             </button>
+
           </div>
-          {error ? <p className="mt-3 text-sm text-rose-300">{error}</p> : null}
+
+          {error && (
+            <p className="mt-3 text-sm text-rose-300">{error}</p>
+          )}
         </header>
 
         <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+
           <div className="order-2 lg:order-1">
             <QuakeMap quakes={quakes} userLocation={userLocation} />
           </div>
 
           <div className="order-1 space-y-3 lg:order-2">
-            {loading && quakes.length === 0 ? (
+
+            {loading && quakes.length === 0 && (
               <p className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-sm text-slate-300">
                 Loading latest earthquakes...
               </p>
-            ) : null}
+            )}
 
-            {quakes.slice(0, 8).map((quake) => {
+            {quakes.slice(0, 8).map(quake => {
               const distanceKm = userLocation
-                ? calcDistanceKm(userLocation.lat, userLocation.lng, quake.lat, quake.lng)
+                ? calcDistanceKm(
+                    userLocation.lat,
+                    userLocation.lng,
+                    quake.lat,
+                    quake.lng
+                  )
                 : null
 
               return (
@@ -167,9 +189,13 @@ function App() {
                 />
               )
             })}
+
           </div>
+
         </section>
+
       </div>
+
       <Footer />
     </main>
   )
