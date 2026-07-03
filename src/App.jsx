@@ -39,7 +39,7 @@ function App() {
       setError('')
 
       const res = await fetch(
-        'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson',
+        'https://earthquake.usgs.gov/fdsnhttps://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojsonws/event/1/query?format=geojson&minlatitude=4&maxlatitude=22&minlongitude=116&maxlongitude=127&orderby=time&limit=50',
         { cache: 'no-store' }
       )
 
