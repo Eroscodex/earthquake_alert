@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import QuakeCard from './components/QuakeCard'
 import QuakeMap from './components/QuakeMap'
-import { calcDistanceKm, playAlertSound } from './utils/phivolcs'
 import Footer from './components/Footer'
+import { calcDistanceKm, playAlertSound } from './utils/phivolcs'
 
 const REFRESH_MS = 30000
 const SIGNIFICANT_MAG = 5
