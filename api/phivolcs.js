@@ -1,45 +1,27 @@
-export const config = {
-  runtime: 'edge',
-}
-
-export default async function handler(request) {
+export default async function handler(req, res) {
   try {
     const response = await fetch(
-      'https://earthquake.phivolcs.dost.gov.ph/',
+      'https://earthquake.phivolcs.dost.gov.ph/EQLatest-Monthly/EQLatest.html',
       {
         headers: {
           'User-Agent': 'Mozilla/5.0',
-          Accept: 'text/html',
+          'Accept': 'text/html',
         },
-        cache: 'no-store',
       }
     )
 
     if (!response.ok) {
-      return new Response(`PHIVOLCS returned ${response.status}`, {
-        status: response.status,
-      })
+      throw new Error(`HTTP ${response.status}`)
     }
 
     const html = await response.text()
 
-    return new Response(html, {
-      headers: {
-        'Content-Type': 'text/html',
-        'Cache-Control': 'no-store',
-      },
-    })
+    res.setHeader('Content-Type', 'text/html')
+    res.status(200).send(html)
   } catch (err) {
-    return new Response(
-      JSON.stringify({
-        error: err.message,
-      }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    res.status(500).json({
+      error: err.message,
+      cause: err.cause?.message,
+    })
   }
 }
