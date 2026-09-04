@@ -9,7 +9,7 @@ function PermissionBanner({
   currentPresetName,
 }) {
   return (
-    <div className="mb-6 overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-cyan-50/80 via-white to-blue-50/80 dark:from-slate-900/90 dark:via-slate-900/90 dark:to-cyan-950/40 p-4 sm:p-5 shadow-lg backdrop-blur-md transition-all">
+    <div className="mb-6 overflow-hidden rounded-2xl border border-cyan-200 dark:border-zinc-800 bg-gradient-to-r from-cyan-50/80 via-white to-blue-50/80 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-4 sm:p-5 shadow-lg backdrop-blur-md transition-all">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         
         {/* Left info area */}
@@ -22,10 +22,10 @@ function PermissionBanner({
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+            <h3 className="text-sm font-semibold text-slate-800 dark:text-zinc-100">
               Site Location & Emergency Alert Permissions
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 max-w-xl">
+            <p className="text-xs text-slate-600 dark:text-zinc-400 mt-0.5 max-w-xl">
               Enable location services to calculate your proximity to earthquake epicenters. Enable notifications to receive immediate sound & pop-up alerts.
             </p>
           </div>
@@ -36,7 +36,7 @@ function PermissionBanner({
           
           {/* Location button / status */}
           {locationStatus === 'granted' ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
               {currentPresetName ? `City: ${currentPresetName}` : 'GPS Location Active'}
             </span>
@@ -55,7 +55,7 @@ function PermissionBanner({
 
           {/* Notification Button */}
           {notificationStatus === 'granted' ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-300 border border-blue-500/30">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/15 px-3 py-1 text-xs font-semibold text-blue-700 dark:text-blue-400 border border-blue-500/30">
               🔔 Notifications On
             </span>
           ) : (
@@ -72,8 +72,8 @@ function PermissionBanner({
 
       {/* Preset Cities Fallback if Location is Denied or User Wants Manual City */}
       {(locationStatus === 'denied' || locationStatus === 'idle' || currentPresetName) && (
-        <div className="mt-3.5 pt-3 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center gap-2 text-xs">
-          <span className="font-medium text-slate-500 dark:text-slate-400">
+        <div className="mt-3.5 pt-3 border-t border-slate-200/80 dark:border-zinc-800 flex flex-wrap items-center gap-2 text-xs">
+          <span className="font-medium text-slate-500 dark:text-zinc-400">
             {locationStatus === 'denied' ? '⚠️ Permission blocked in browser settings. Pick your nearest city:' : 'Or set a preset location:'}
           </span>
           <div className="flex flex-wrap gap-1.5">
@@ -84,7 +84,7 @@ function PermissionBanner({
                 className={`rounded-full px-2.5 py-0.5 text-xs transition-all cursor-pointer ${
                   currentPresetName === city.name
                     ? 'bg-cyan-500 text-white font-semibold shadow-xs'
-                    : 'bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-cyan-50 dark:hover:bg-slate-700'
+                    : 'bg-white/80 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700 hover:bg-cyan-50 dark:hover:bg-zinc-700'
                 }`}
               >
                 {city.name}
@@ -96,5 +96,6 @@ function PermissionBanner({
     </div>
   )
 }
+
 
 export default PermissionBanner
