@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CircleMarker, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
@@ -11,37 +12,80 @@ L.Icon.Default.mergeOptions({
 
 const PH_CENTER = [12.8797, 121.774]
 
-function QuakeMap({ quakes, userLocation }) {
-  return (
-    <div className="h-[420px] overflow-hidden rounded-2xl border border-slate-800">
-      <MapContainer center={PH_CENTER} zoom={5.5} className="h-full w-full">
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+function QuakeMap({ quakes = [], userLocation, activeQuakeId, onSelectQuake }) {
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
-        {quakes.slice(0, 30).map((quake) => (
-          <CircleMarker
-            key={quake.id}
-            center={[quake.lat, quake.lng]}
-            radius={Math.max(5, quake.magnitude * 1.8)}
-            pathOptions={{ color: quake.magnitude >= 5 ? '#ff0026' : '#2600ff' }}
-          >
-            <Popup>
-              <strong>M {quake.magnitude.toFixed(1)}</strong>
-              <br />
-              {quake.location}
-              <br />
-              Depth: {quake.depthKm.toFixed(1)} km
-              <br />
-              {quake.dateTime}
-            </Popup>
-          </CircleMarker>
-        ))}
+  useEffect(() => {
+    const checkDark = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'))
+    }
+    checkDark()
+    const observer = new MutationObserver(checkDark)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [])
+
+  const tileUrl = isDarkMode
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+
+  const tileAttribution = isDarkMode
+    ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+  return (
+    <div className="relative h-[440px] w-full overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-100 dark:bg-slate-900 shadow-xl transition-all">
+      <MapContainer center={PH_CENTER} zoom={5.5} className="h-full w-full">
+        <TileLayer key={tileUrl} attribution={tileAttribution} url={tileUrl} />
+
+        {quakes.slice(0, 40).map((quake) => {
+          const isSelected = activeQuakeId === quake.id
+          const isSignificant = quake.magnitude >= 5.0
+
+          let circleColor = '#06b6d4' // Cyan / Moderate
+          if (quake.magnitude >= 5.0) circleColor = '#f43f5e' // Rose / High
+          else if (quake.magnitude >= 4.0) circleColor = '#f59e0b' // Amber
+
+          return (
+            <CircleMarker
+              key={quake.id}
+              center={[quake.lat, quake.lng]}
+              radius={isSelected ? Math.max(12, quake.magnitude * 2.8) : Math.max(6, quake.magnitude * 2)}
+              pathOptions={{
+                color: circleColor,
+                fillColor: circleColor,
+                fillOpacity: isSelected ? 0.8 : 0.5,
+                weight: isSelected || isSignificant ? 3 : 1.5,
+              }}
+              eventHandlers={{
+                click: () => onSelectQuake && onSelectQuake(quake.id),
+              }}
+            >
+              <Popup className="custom-leaflet-popup">
+                <div className="p-1 space-y-1 text-slate-900">
+                  <div className="flex items-center gap-1.5 font-bold text-sm">
+                    <span className={`inline-block px-1.5 py-0.5 rounded text-white text-xs ${
+                      quake.magnitude >= 5 ? 'bg-rose-600' : quake.magnitude >= 4 ? 'bg-amber-600' : 'bg-cyan-600'
+                    }`}>
+                      M {quake.magnitude.toFixed(1)}
+                    </span>
+                    <span>{quake.location}</span>
+                  </div>
+                  <div className="text-xs text-slate-600 space-y-0.5">
+                    <div>Depth: <strong>{quake.depthKm.toFixed(1)} km</strong></div>
+                    <div>Time: {quake.dateTime}</div>
+                  </div>
+                </div>
+              </Popup>
+            </CircleMarker>
+          )
+        })}
 
         {userLocation ? (
           <Marker position={[userLocation.lat, userLocation.lng]}>
-            <Popup>Your location</Popup>
+            <Popup>
+              <strong>📍 Your Selected Location</strong>
+            </Popup>
           </Marker>
         ) : null}
       </MapContainer>
@@ -49,4 +93,4 @@ function QuakeMap({ quakes, userLocation }) {
   )
 }
 
-export default QuakeMap
+export default QuakeMap

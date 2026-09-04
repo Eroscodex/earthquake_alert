@@ -1,28 +1,66 @@
-function QuakeCard({ quake, distanceKm, isSignificant }) {
+function QuakeCard({ quake, distanceKm, isSignificant, isSelected, onSelect }) {
+  let magBadgeStyle = 'bg-cyan-500/10 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-300 border-cyan-500/30'
+  if (quake.magnitude >= 5.0) {
+    magBadgeStyle = 'bg-rose-500/15 text-rose-600 dark:bg-rose-500/25 dark:text-rose-300 border-rose-500/40 animate-pulse'
+  } else if (quake.magnitude >= 4.0) {
+    magBadgeStyle = 'bg-amber-500/15 text-amber-600 dark:bg-amber-500/25 dark:text-amber-300 border-amber-500/30'
+  }
+
   return (
-    <article className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg shadow-slate-950/30">
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <p className="text-sm text-slate-300">{quake.dateTime}</p>
-        {isSignificant ? (
-          <span className="rounded-full border border-rose-500/60 bg-rose-500/20 px-2 py-0.5 text-xs font-medium text-rose-200">
-            Significant
+    <article
+      onClick={() => onSelect && onSelect(quake.id)}
+      className={`group relative overflow-hidden rounded-2xl border p-4 shadow-sm backdrop-blur-md transition-all cursor-pointer ${
+        isSelected
+          ? 'border-cyan-500 bg-cyan-50/90 dark:bg-cyan-950/40 ring-2 ring-cyan-500/50 shadow-md'
+          : 'border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 hover:border-cyan-500/40 hover:bg-cyan-50/50 dark:hover:bg-slate-800/70 hover:shadow-md'
+      }`}
+    >
+      {/* Top row: Magnitude & Tags */}
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className={`inline-flex items-center rounded-xl border px-3 py-1 text-sm font-bold shadow-2xs ${magBadgeStyle}`}>
+            M {quake.magnitude.toFixed(1)}
           </span>
-        ) : null}
+
+          {isSignificant && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
+              Significant
+            </span>
+          )}
+        </div>
+
+        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+          {quake.dateTime}
+        </p>
       </div>
 
-      <h2 className="text-base font-semibold text-white">M {quake.magnitude.toFixed(1)}</h2>
-      <p className="mt-1 text-sm text-slate-200">{quake.location}</p>
+      {/* Location header */}
+      <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+        {quake.location}
+      </h3>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-slate-300 sm:grid-cols-3">
-        <p>Depth: {quake.depthKm.toFixed(1)} km</p>
-        <p>Lat: {quake.lat.toFixed(2)}</p>
-        <p>Lng: {quake.lng.toFixed(2)}</p>
-        <p className="col-span-2 sm:col-span-3">
-          Distance: {distanceKm ? `${distanceKm.toFixed(1)} km` : 'Enable location'}
-        </p>
+      {/* Detail statistics grid */}
+      <div className="mt-3 grid grid-cols-3 gap-2 text-xs font-medium text-slate-600 dark:text-slate-300 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div>
+          <span className="block text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Depth</span>
+          <span>{quake.depthKm.toFixed(1)} km</span>
+        </div>
+
+        <div>
+          <span className="block text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Coordinates</span>
+          <span>{quake.lat.toFixed(2)}°, {quake.lng.toFixed(2)}°</span>
+        </div>
+
+        <div>
+          <span className="block text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider">Proximity</span>
+          <span className={distanceKm != null ? 'font-semibold text-cyan-600 dark:text-cyan-400' : 'text-slate-400'}>
+            {distanceKm != null ? `${distanceKm.toFixed(1)} km` : 'Set location'}
+          </span>
+        </div>
       </div>
     </article>
   )
 }
 
-export default QuakeCard
+export default QuakeCard
