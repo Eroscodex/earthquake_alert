@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { CircleMarker, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
@@ -13,30 +12,13 @@ L.Icon.Default.mergeOptions({
 const PH_CENTER = [12.8797, 121.774]
 
 function QuakeMap({ quakes = [], userLocation, activeQuakeId, onSelectQuake }) {
-  const [isDarkMode, setIsDarkMode] = useState(false)
-
-  useEffect(() => {
-    const checkDark = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark'))
-    }
-    checkDark()
-    const observer = new MutationObserver(checkDark)
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-    return () => observer.disconnect()
-  }, [])
-
-  const tileUrl = isDarkMode
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-
-  const tileAttribution = isDarkMode
-    ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-    : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-
   return (
     <div className="relative h-[440px] w-full overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-100 dark:bg-slate-900 shadow-xl transition-all">
       <MapContainer center={PH_CENTER} zoom={5.5} className="h-full w-full">
-        <TileLayer key={tileUrl} attribution={tileAttribution} url={tileUrl} />
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
         {quakes.slice(0, 40).map((quake) => {
           const isSelected = activeQuakeId === quake.id
@@ -93,4 +75,5 @@ function QuakeMap({ quakes = [], userLocation, activeQuakeId, onSelectQuake }) {
   )
 }
 
-export default QuakeMap
+export default QuakeMap
+

@@ -27,6 +27,15 @@ html.dark body {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* Dark mode map tile styling - avoids API key requirements */
+html.dark .leaflet-tile-layer {
+  filter: brightness(0.6) invert(1) contrast(2.5) hue-rotate(190deg) saturate(0.4) brightness(0.85);
+}
+
+html.dark .leaflet-container {
+  background-color: #0f172a !important;
+}
+
 /* Smooth keyframes */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.97); }
@@ -36,4 +45,5 @@ html.dark body {
 .animate-fade-in {
   animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
 

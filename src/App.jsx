@@ -11,11 +11,35 @@ const REFRESH_INTERVAL_SEC = 10
 const SIGNIFICANT_MAG = 5.0
 
 function App() {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('hw-theme')
+      if (stored) return stored
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+    return 'light'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'dark') {
+      root.classList.add('dark')
+    } else {
+      root.classList.remove('dark')
+    }
+    localStorage.setItem('hw-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }
+
   const [quakes, setQuakes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [updatedAt, setUpdatedAt] = useState(null)
   const [countdown, setCountdown] = useState(REFRESH_INTERVAL_SEC)
+
 
   // Location state
   const [userLocation, setUserLocation] = useState(null)
@@ -314,7 +338,8 @@ function App() {
 
             {/* Header Controls */}
             <div className="flex flex-wrap items-center gap-2">
-              <ThemeToggle />
+              <ThemeToggle theme={theme} onToggleTheme={toggleTheme} />
+
 
               <button
                 onClick={triggerTestAlarm}
