@@ -361,14 +361,14 @@ function App() {
           </div>
 
           {/* Sync Stats & Refresh Bar */}
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cyan-200 dark:border-zinc-800 text-xs font-medium text-slate-600 dark:text-zinc-400">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 pt-3.5 border-t border-cyan-200 dark:border-zinc-800 text-xs font-medium text-slate-600 dark:text-zinc-400">
             
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-2.5 sm:px-3 py-1 border border-slate-200 dark:border-zinc-700 text-[11px] sm:text-xs">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-2.5 sm:px-3 py-1 border border-slate-200 dark:border-zinc-700 text-[11px] sm:text-xs whitespace-nowrap">
                 🔄 Sync: <strong>{countdown}s</strong>
               </span>
 
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-2.5 sm:px-3 py-1 border border-slate-200 dark:border-zinc-700 text-[11px] sm:text-xs">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-2.5 sm:px-3 py-1 border border-slate-200 dark:border-zinc-700 text-[11px] sm:text-xs whitespace-nowrap">
                 Updated: <strong>{updatedAt ? updatedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Syncing...'}</strong>
               </span>
             </div>
@@ -376,7 +376,7 @@ function App() {
             <button
               onClick={fetchQuakes}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 rounded-full bg-cyan-600 text-white px-3.5 py-1 text-xs font-semibold hover:bg-cyan-700 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-full bg-cyan-600 text-white px-3.5 py-1 text-xs font-semibold hover:bg-cyan-700 active:scale-95 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap"
             >
               {loading ? 'Refreshing...' : '⚡ Refresh Now'}
             </button>
@@ -400,7 +400,7 @@ function App() {
           currentPresetName={currentPresetName}
         />
 
-        {/* Quick Statistics Strip: 2 cols on mobile, 4 cols on desktop */}
+        {/* Quick Statistics Strip */}
         <section className="mb-6 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5">
           
           <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3 sm:p-3.5 shadow-xs backdrop-blur-md">
@@ -451,15 +451,15 @@ function App() {
             />
           </div>
 
-          {/* Controls row on mobile: 2 cols for Magnitude pills & Sort */}
-          <div className="grid grid-cols-2 sm:flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          {/* Controls row: Magnitude pills & Sort */}
+          <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto">
             {/* Magnitude Pills */}
-            <div className="flex items-center justify-between sm:justify-start gap-1 rounded-xl bg-slate-100 dark:bg-zinc-800 p-1 border border-slate-200 dark:border-zinc-700">
+            <div className="flex items-center gap-1 rounded-xl bg-slate-100 dark:bg-zinc-800 p-1 border border-slate-200 dark:border-zinc-700 shrink-0">
               {['all', '4.0', '5.0'].map((val) => (
                 <button
                   key={val}
                   onClick={() => setMinMagFilter(val)}
-                  className={`flex-1 sm:flex-initial rounded-lg px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-semibold transition-all cursor-pointer text-center ${
+                  className={`rounded-lg px-2.5 sm:px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     minMagFilter === val
                       ? 'bg-cyan-500 text-white shadow-xs'
                       : 'text-slate-600 dark:text-zinc-300 hover:bg-slate-200/60 dark:hover:bg-zinc-700/60'
@@ -471,17 +471,15 @@ function App() {
             </div>
 
             {/* Sort selector */}
-            <div className="flex items-center justify-end">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 focus:outline-none cursor-pointer"
-              >
-                <option value="time">Latest First</option>
-                <option value="mag">Highest Mag</option>
-                {userLocation && <option value="distance">Nearest Me</option>}
-              </select>
-            </div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 focus:outline-none cursor-pointer shrink-0"
+            >
+              <option value="time">Latest First</option>
+              <option value="mag">Highest Mag</option>
+              {userLocation && <option value="distance">Nearest Me</option>}
+            </select>
           </div>
 
         </section>
@@ -492,11 +490,13 @@ function App() {
           
           {/* Map Column */}
           <div className="order-2 lg:order-1 space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-slate-800 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-                <span>🗺️ Epicenter Map Visualization</span>
-                <span className="text-xs font-normal text-slate-400 dark:text-zinc-500">({filteredQuakes.length} mapped)</span>
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5 whitespace-nowrap">
+                <span>🗺️ Epicenter Map</span>
               </h2>
+              <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20 whitespace-nowrap">
+                {filteredQuakes.length} mapped
+              </span>
             </div>
 
             <QuakeMap
@@ -509,11 +509,12 @@ function App() {
 
           {/* List Column */}
           <div className="order-1 lg:order-2 space-y-3">
-            <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-slate-800 dark:text-zinc-100 uppercase tracking-wider">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-zinc-100 uppercase tracking-wider whitespace-nowrap">
                 ⚡ Earthquake Feed ({filteredQuakes.length})
               </h2>
             </div>
+
 
             {loading && quakes.length === 0 && (
               <div className="rounded-2xl border border-slate-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-8 text-center text-xs text-slate-500 dark:text-zinc-400">

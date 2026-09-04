@@ -76,21 +76,22 @@ function PermissionBanner({
           <span className="font-medium text-slate-500 dark:text-zinc-400">
             {locationStatus === 'denied' ? '⚠️ Permission blocked in browser settings. Pick your nearest city:' : 'Or set a preset location:'}
           </span>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-1">
             {PH_PRESET_CITIES.map(city => (
               <button
                 key={city.name}
                 onClick={() => onSelectPresetCity(city)}
-                className={`rounded-full px-2.5 py-0.5 text-xs transition-all cursor-pointer ${
+                className={`rounded-full px-3 py-1 text-xs whitespace-nowrap font-medium transition-all cursor-pointer ${
                   currentPresetName === city.name
                     ? 'bg-cyan-500 text-white font-semibold shadow-xs'
-                    : 'bg-white/80 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700 hover:bg-cyan-50 dark:hover:bg-zinc-700'
+                    : 'bg-white/90 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700 hover:bg-cyan-50 dark:hover:bg-zinc-700'
                 }`}
               >
                 {city.name}
               </button>
             ))}
           </div>
+
         </div>
       )}
     </div>
