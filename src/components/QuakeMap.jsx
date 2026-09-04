@@ -13,7 +13,8 @@ const PH_CENTER = [12.8797, 121.774]
 
 function QuakeMap({ quakes = [], userLocation, activeQuakeId, onSelectQuake }) {
   return (
-    <div className="relative h-[440px] w-full overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-100 dark:bg-slate-900 shadow-xl transition-all">
+    <div className="relative h-[340px] sm:h-[440px] w-full overflow-hidden rounded-2xl border border-cyan-500/20 bg-slate-100 dark:bg-zinc-900 shadow-xl transition-all">
+
       <MapContainer center={PH_CENTER} zoom={5.5} className="h-full w-full">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

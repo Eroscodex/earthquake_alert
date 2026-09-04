@@ -41,24 +41,25 @@ function QuakeCard({ quake, distanceKm, isSignificant, isSelected, onSelect }) {
       </h3>
 
       {/* Detail statistics grid */}
-      <div className="mt-3 grid grid-cols-3 gap-2 text-xs font-medium text-slate-600 dark:text-zinc-300 pt-2 border-t border-slate-100 dark:border-zinc-800">
+      <div className="mt-3 grid grid-cols-3 gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-medium text-slate-600 dark:text-zinc-300 pt-2 border-t border-slate-100 dark:border-zinc-800">
         <div>
-          <span className="block text-[10px] text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Depth</span>
-          <span>{quake.depthKm.toFixed(1)} km</span>
+          <span className="block text-[9px] sm:text-[10px] text-slate-400 dark:text-zinc-500 uppercase tracking-wider truncate">Depth</span>
+          <span className="block truncate">{quake.depthKm.toFixed(1)} km</span>
         </div>
 
         <div>
-          <span className="block text-[10px] text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Coordinates</span>
-          <span>{quake.lat.toFixed(2)}°, {quake.lng.toFixed(2)}°</span>
+          <span className="block text-[9px] sm:text-[10px] text-slate-400 dark:text-zinc-500 uppercase tracking-wider truncate">Coords</span>
+          <span className="block truncate">{quake.lat.toFixed(2)}°, {quake.lng.toFixed(2)}°</span>
         </div>
 
         <div>
-          <span className="block text-[10px] text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Proximity</span>
-          <span className={distanceKm != null ? 'font-semibold text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-zinc-500'}>
-            {distanceKm != null ? `${distanceKm.toFixed(1)} km` : 'Set location'}
+          <span className="block text-[9px] sm:text-[10px] text-slate-400 dark:text-zinc-500 uppercase tracking-wider truncate">Proximity</span>
+          <span className={`block truncate ${distanceKm != null ? 'font-semibold text-cyan-600 dark:text-cyan-400' : 'text-slate-400 dark:text-zinc-500'}`}>
+            {distanceKm != null ? `${distanceKm.toFixed(1)} km` : 'Set loc'}
           </span>
         </div>
       </div>
+
     </article>
   )
 }

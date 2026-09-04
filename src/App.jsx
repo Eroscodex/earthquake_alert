@@ -317,15 +317,15 @@ function App() {
       {/* Main Container */}
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
         
-        {/* Top Header Card (Hourwash Aesthetic) */}
-        <header className="relative mb-6 overflow-hidden rounded-3xl border border-cyan-200 dark:border-zinc-800 bg-gradient-to-br from-cyan-50 via-white to-sky-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-6 shadow-lg dark:shadow-2xl backdrop-blur-xl transition-all">
+        {/* Top Header Card */}
+        <header className="relative mb-6 overflow-hidden rounded-3xl border border-cyan-200 dark:border-zinc-800 bg-gradient-to-br from-cyan-50 via-white to-sky-100 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 p-4 sm:p-6 shadow-lg dark:shadow-2xl backdrop-blur-xl transition-all">
           
-          <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
             
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
                 <span className="h-2 w-2 rounded-full bg-cyan-500 animate-ping"></span>
-                HOURWASH REAL-TIME PH MONITOR
+                REAL-TIME PHILIPPINE SEISMIC MONITOR
               </div>
 
               <h1 className="mt-2 text-2xl font-extrabold sm:text-3xl text-slate-900 dark:text-white">
@@ -336,40 +336,40 @@ function App() {
               </p>
             </div>
 
-            {/* Header Controls */}
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Header Controls (Grid 3 cols on mobile) */}
+            <div className="grid grid-cols-3 sm:flex items-center gap-2 w-full md:w-auto">
               <ThemeToggle theme={theme} onToggleTheme={toggleTheme} />
 
               <button
                 onClick={triggerTestAlarm}
                 type="button"
-                className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/40 bg-rose-500/10 px-3.5 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1 rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 sm:px-3.5 py-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all cursor-pointer truncate"
                 title="Test emergency sound alarm"
               >
-                🔔 Test Alarm
+                🔔 <span className="hidden xs:inline">Test</span> Alarm
               </button>
 
               <button
                 onClick={() => setIsSoundMuted(!isSoundMuted)}
                 type="button"
-                className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 dark:border-zinc-700 bg-white/80 dark:bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-700 active:scale-95 transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1 rounded-full border border-slate-300 dark:border-zinc-700 bg-white/80 dark:bg-zinc-800 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-700 active:scale-95 transition-all cursor-pointer truncate"
               >
-                {isSoundMuted ? '🔇 Muted' : '🔊 Sound On'}
+                {isSoundMuted ? '🔇 Muted' : '🔊 Sound'}
               </button>
             </div>
 
           </div>
 
           {/* Sync Stats & Refresh Bar */}
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cyan-200 dark:border-zinc-800 text-xs font-medium text-slate-600 dark:text-zinc-400">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-cyan-200 dark:border-zinc-800 text-xs font-medium text-slate-600 dark:text-zinc-400">
             
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-3 py-1 border border-slate-200 dark:border-zinc-700">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-2.5 sm:px-3 py-1 border border-slate-200 dark:border-zinc-700 text-[11px] sm:text-xs">
                 🔄 Sync: <strong>{countdown}s</strong>
               </span>
 
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-3 py-1 border border-slate-200 dark:border-zinc-700">
-                Last Updated: <strong>{updatedAt ? updatedAt.toLocaleTimeString() : 'Syncing...'}</strong>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-zinc-800/80 px-2.5 sm:px-3 py-1 border border-slate-200 dark:border-zinc-700 text-[11px] sm:text-xs">
+                Updated: <strong>{updatedAt ? updatedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Syncing...'}</strong>
               </span>
             </div>
 
@@ -400,26 +400,26 @@ function App() {
           currentPresetName={currentPresetName}
         />
 
-        {/* Quick Statistics Strip */}
-        <section className="mb-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {/* Quick Statistics Strip: 2 cols on mobile, 4 cols on desktop */}
+        <section className="mb-6 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5">
           
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3.5 shadow-xs backdrop-blur-md">
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Total Quakes</span>
-            <div className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">{stats.total}</div>
-            <span className="text-[10px] text-slate-500 dark:text-zinc-500">Past 24-48 Hours</span>
+          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3 sm:p-3.5 shadow-xs backdrop-blur-md">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider block truncate">Total Quakes</span>
+            <div className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mt-0.5">{stats.total}</div>
+            <span className="text-[10px] text-slate-500 dark:text-zinc-500 block truncate">Past 24-48 Hours</span>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3.5 shadow-xs backdrop-blur-md">
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Highest Mag</span>
-            <div className={`text-xl font-bold mt-0.5 ${stats.maxMag >= 5 ? 'text-rose-600 dark:text-rose-400' : 'text-cyan-600 dark:text-cyan-400'}`}>
+          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3 sm:p-3.5 shadow-xs backdrop-blur-md">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider block truncate">Highest Mag</span>
+            <div className={`text-lg sm:text-xl font-bold mt-0.5 ${stats.maxMag >= 5 ? 'text-rose-600 dark:text-rose-400' : 'text-cyan-600 dark:text-cyan-400'}`}>
               M {stats.maxMag > 0 ? stats.maxMag.toFixed(1) : '-'}
             </div>
-            <span className="text-[10px] text-slate-500 dark:text-zinc-500">{stats.maxMag >= 5 ? 'Significant Alert' : 'Moderate'}</span>
+            <span className="text-[10px] text-slate-500 dark:text-zinc-500 block truncate">{stats.maxMag >= 5 ? 'Significant Alert' : 'Moderate'}</span>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3.5 shadow-xs backdrop-blur-md">
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Nearest Epicenter</span>
-            <div className="text-xl font-bold text-cyan-600 dark:text-cyan-400 mt-0.5">
+          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3 sm:p-3.5 shadow-xs backdrop-blur-md">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider block truncate">Nearest Epicenter</span>
+            <div className="text-lg sm:text-xl font-bold text-cyan-600 dark:text-cyan-400 mt-0.5 truncate">
               {stats.closest ? `${stats.closest.dist.toFixed(0)} km` : 'Set Loc'}
             </div>
             <span className="text-[10px] text-slate-500 dark:text-zinc-500 truncate block">
@@ -427,21 +427,21 @@ function App() {
             </span>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3.5 shadow-xs backdrop-blur-md">
-            <span className="text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">Sound Sirens</span>
-            <div className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">
+          <div className="rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3 sm:p-3.5 shadow-xs backdrop-blur-md">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-slate-400 dark:text-zinc-500 uppercase tracking-wider block truncate">Sound Sirens</span>
+            <div className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mt-0.5">
               {isSoundMuted ? 'Muted' : 'Active'}
             </div>
-            <span className="text-[10px] text-slate-500 dark:text-zinc-500">Auto Sound Alert</span>
+            <span className="text-[10px] text-slate-500 dark:text-zinc-500 block truncate">Auto Sound Alert</span>
           </div>
 
         </section>
 
         {/* Filters and Search Toolbar */}
-        <section className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3.5 shadow-xs">
+        <section className="mb-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-slate-200/80 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900 p-3 sm:p-3.5 shadow-xs">
           
           {/* Search Input */}
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative w-full sm:flex-1">
             <input
               type="text"
               placeholder="Search city, province, or region (e.g. Davao, Cotabato)..."
@@ -451,39 +451,41 @@ function App() {
             />
           </div>
 
-          {/* Magnitude Pills */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-400 dark:text-zinc-400 font-medium mr-1">Mag:</span>
-            {['all', '4.0', '5.0'].map((val) => (
-              <button
-                key={val}
-                onClick={() => setMinMagFilter(val)}
-                className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all cursor-pointer ${
-                  minMagFilter === val
-                    ? 'bg-cyan-500 text-white shadow-xs'
-                    : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-700'
-                }`}
-              >
-                {val === 'all' ? 'All M3+' : `M${val}+`}
-              </button>
-            ))}
-          </div>
+          {/* Controls row on mobile: 2 cols for Magnitude pills & Sort */}
+          <div className="grid grid-cols-2 sm:flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+            {/* Magnitude Pills */}
+            <div className="flex items-center justify-between sm:justify-start gap-1 rounded-xl bg-slate-100 dark:bg-zinc-800 p-1 border border-slate-200 dark:border-zinc-700">
+              {['all', '4.0', '5.0'].map((val) => (
+                <button
+                  key={val}
+                  onClick={() => setMinMagFilter(val)}
+                  className={`flex-1 sm:flex-initial rounded-lg px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs font-semibold transition-all cursor-pointer text-center ${
+                    minMagFilter === val
+                      ? 'bg-cyan-500 text-white shadow-xs'
+                      : 'text-slate-600 dark:text-zinc-300 hover:bg-slate-200/60 dark:hover:bg-zinc-700/60'
+                  }`}
+                >
+                  {val === 'all' ? 'All M3+' : `M${val}+`}
+                </button>
+              ))}
+            </div>
 
-          {/* Sort selector */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-slate-400 dark:text-zinc-400 font-medium">Sort:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="rounded-lg border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:text-zinc-200 focus:outline-none cursor-pointer"
-            >
-              <option value="time">Latest First</option>
-              <option value="mag">Highest Magnitude</option>
-              {userLocation && <option value="distance">Nearest to Me</option>}
-            </select>
+            {/* Sort selector */}
+            <div className="flex items-center justify-end">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-zinc-200 focus:outline-none cursor-pointer"
+              >
+                <option value="time">Latest First</option>
+                <option value="mag">Highest Mag</option>
+                {userLocation && <option value="distance">Nearest Me</option>}
+              </select>
+            </div>
           </div>
 
         </section>
+
 
         {/* Content Layout: Left Map, Right List */}
         <section className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">

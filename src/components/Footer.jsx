@@ -13,7 +13,7 @@ function Footer() {
           </div>
 
           <p className="mt-2 text-sm text-slate-600 dark:text-zinc-400 max-w-md">
-            Real-time earthquake monitoring, magnitude alerts, and proximity visualization for the Philippines. Inspired by Hourwash Laundry Shop styling.
+            Real-time earthquake monitoring, magnitude alerts, and proximity visualization for the Philippines.
           </p>
 
           <p className="mt-2 text-xs text-slate-500 dark:text-zinc-500">
@@ -43,7 +43,7 @@ function Footer() {
 
       <div className="border-t border-slate-200/60 dark:border-zinc-800 py-4 bg-slate-50/50 dark:bg-black">
         <p className="text-center text-xs text-slate-500 dark:text-zinc-400 font-medium">
-          © {new Date().getFullYear()} PH Quake Alert • Designed with Hourwash Aesthetic
+          © {new Date().getFullYear()} PH Quake Alert • Real-Time Philippine Seismic Network
         </p>
 
         <p className="mt-1 text-center text-xs text-slate-400 dark:text-zinc-500">
@@ -53,6 +53,7 @@ function Footer() {
     </footer>
   )
 }
+
 
 
 export default Footer
