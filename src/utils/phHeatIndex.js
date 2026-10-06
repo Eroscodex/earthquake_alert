@@ -1,0 +1,180 @@
+export const PH_HEAT_INDEX_STATIONS = [
+  {
+    id: 'hi-1',
+    station: 'Tuguegarao City, Cagayan',
+    province: 'Cagayan',
+    heatIndex: 44,
+    temp: 36.5,
+    humidity: 62,
+    lat: 17.6132,
+    lng: 121.7270,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-2',
+    station: 'Dagupan City, Pangasinan',
+    province: 'Pangasinan',
+    heatIndex: 45,
+    temp: 36.8,
+    humidity: 65,
+    lat: 16.0433,
+    lng: 120.3333,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-3',
+    station: 'Sangley Point, Cavite',
+    province: 'Cavite',
+    heatIndex: 42,
+    temp: 35.2,
+    humidity: 68,
+    lat: 14.4939,
+    lng: 120.9069,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-4',
+    station: 'NAIA, Pasay City (Metro Manila)',
+    province: 'Metro Manila',
+    heatIndex: 41,
+    temp: 34.8,
+    humidity: 64,
+    lat: 14.5086,
+    lng: 121.0194,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-5',
+    station: 'Ambulong, Tanauan City, Batangas',
+    province: 'Batangas',
+    heatIndex: 43,
+    temp: 35.6,
+    humidity: 66,
+    lat: 14.0847,
+    lng: 121.1508,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-6',
+    station: 'Cuyo, Palawan',
+    province: 'Palawan',
+    heatIndex: 40,
+    temp: 34.2,
+    humidity: 70,
+    lat: 10.8496,
+    lng: 121.0122,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-7',
+    station: 'Roxas City, Capiz',
+    province: 'Capiz',
+    heatIndex: 42,
+    temp: 35.0,
+    humidity: 67,
+    lat: 11.5853,
+    lng: 122.7511,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-8',
+    station: 'Iloilo City, Iloilo',
+    province: 'Iloilo',
+    heatIndex: 39,
+    temp: 33.8,
+    humidity: 69,
+    lat: 10.7202,
+    lng: 122.5621,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-9',
+    station: 'Zamboanga City',
+    province: 'Zamboanga del Sur',
+    heatIndex: 41,
+    temp: 34.5,
+    humidity: 68,
+    lat: 6.9214,
+    lng: 122.0790,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-10',
+    station: 'Davao City, Davao del Sur',
+    province: 'Davao del Sur',
+    heatIndex: 38,
+    temp: 33.5,
+    humidity: 71,
+    lat: 7.1907,
+    lng: 125.4553,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-11',
+    station: 'General Santos City',
+    province: 'South Cotabato',
+    heatIndex: 39,
+    temp: 34.0,
+    humidity: 68,
+    lat: 6.1164,
+    lng: 125.1716,
+    time: '2:00 PM',
+  },
+  {
+    id: 'hi-12',
+    station: 'Cagayan de Oro City',
+    province: 'Misamis Oriental',
+    heatIndex: 37,
+    temp: 33.0,
+    humidity: 72,
+    lat: 8.4542,
+    lng: 124.6319,
+    time: '2:00 PM',
+  },
+]
+
+export function getHeatCategory(heatIndex) {
+  if (heatIndex >= 52) {
+    return {
+      label: 'Extreme Danger (Matinding Panganib)',
+      shortLabel: 'Extreme Danger',
+      color: 'bg-red-700 text-white border-red-800',
+      badgeColor: 'bg-red-600 text-white',
+      advice: 'Heat stroke highly imminent! Stay indoors and avoid physical exertion.',
+    }
+  }
+  if (heatIndex >= 42) {
+    return {
+      label: 'Danger (Panganib)',
+      shortLabel: 'Danger',
+      color: 'bg-rose-500/20 text-rose-700 dark:text-rose-300 border-rose-500/40',
+      badgeColor: 'bg-rose-600 text-white',
+      advice: 'Heat cramps and heat exhaustion likely. Heat stroke probable with continued activity.',
+    }
+  }
+  if (heatIndex >= 33) {
+    return {
+      label: 'Extreme Caution (Extreme Mag-ingat)',
+      shortLabel: 'Extreme Caution',
+      color: 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-500/40',
+      badgeColor: 'bg-amber-600 text-white',
+      advice: 'Heat cramps and heat exhaustion possible with prolonged exposure and activity.',
+    }
+  }
+  if (heatIndex >= 27) {
+    return {
+      label: 'Caution (Mag-ingat)',
+      shortLabel: 'Caution',
+      color: 'bg-yellow-500/20 text-yellow-800 dark:text-yellow-300 border-yellow-500/30',
+      badgeColor: 'bg-yellow-500 text-slate-900',
+      advice: 'Fatigue possible with prolonged exposure and activity.',
+    }
+  }
+  return {
+    label: 'Normal',
+    shortLabel: 'Normal',
+    color: 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
+    badgeColor: 'bg-emerald-600 text-white',
+    advice: 'Comfortable temperature. Stay hydrated.',
+  }
+}
